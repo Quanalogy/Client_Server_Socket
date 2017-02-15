@@ -20,10 +20,6 @@ int main() {
         cout << "Successfully created the socket..." << endl;
     }
 
-    string message;
-    cout << "Insert message to send to the server on IP: " << ip << endl;
-    getline(cin, message);
-    cout << "You've entered: " << message << endl;
 
     const sockaddr tcpAddress = {AF_INET, {*ip}};
 
@@ -36,6 +32,10 @@ int main() {
         cout << "Connected to the server..." << endl;
     }
 
+    string message;
+    cout << "Insert message to send to the server on IP: " << ip << endl;
+    getline(cin, message);
+    cout << "You've entered: " << message << endl;
 
     return 0;
 }

@@ -3,5 +3,5 @@ project(Client_Server_Socket)
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(SOURCE_FILES Client/main.cpp)
+set(SOURCE_FILES Client/main.cpp Server/TCPServer.cpp Server/TCPServer.h)
 add_executable(Client_Server_Socket ${SOURCE_FILES})
