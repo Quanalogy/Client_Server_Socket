@@ -26,7 +26,7 @@ int TCPClient::initClient() {
 
     const sockaddr tcpAddress = {AF_INET, {*ip}};
 
-    int error = connect(tcpSocket, &tcpAddress, IPSIZE);
+    int error = connect(tcpSocket, &tcpAddress, sizeof(tcpAddress));
     if(error == -1) {
         cout << "An error occured when connecting to the server, dropping connection.. :(" << endl
              << error << endl;
