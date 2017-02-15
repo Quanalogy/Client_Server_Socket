@@ -24,7 +24,7 @@ int TCPClient::initClient() {
     }
 
 
-    const sockaddr tcpAddress = {AF_INET, {*ip}};
+    const sockaddr tcpAddress = {AF_INET, "10.0.0.1"};
 
     int error = connect(tcpSocket, &tcpAddress, sizeof(tcpAddress));
     if(error == -1) {
