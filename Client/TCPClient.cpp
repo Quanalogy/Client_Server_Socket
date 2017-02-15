@@ -1,18 +1,21 @@
-#include <iostream>
-#include <sys/socket.h>
+//
+// Created by munk on 15-02-17.
+//
 
-#define IPSIZE 14
-char ip[IPSIZE] = {'1','0','.','0','.','0','.','1'};
+#include "TCPClient.h"
+#include <iostream>
 
 using namespace std;
-int main() {
+TCPClient::TCPClient() {
     cout << "Initializing client..." << endl << "Creating socket..." << endl;
+}
 
+int TCPClient::initClient() {
     // create a socket with standard setup of:
     // network connection,
     // continuous stream of data
     // and default protocol (0)
-    int tcpSocket = socket(AF_INET, SOCK_STREAM, 0);
+    tcpSocket = socket(AF_INET, SOCK_STREAM, 0);
     if(tcpSocket <= 0){
         cout << "Failed creation of socket" << endl << tcpSocket << endl;
         return tcpSocket;
@@ -26,16 +29,9 @@ int main() {
     int error = connect(tcpSocket, &tcpAddress, IPSIZE);
     if(error == -1) {
         cout << "An error occured when connecting to the server, dropping connection.. :(" << endl
-                << error << endl;
+             << error << endl;
         return error;
     } else {
         cout << "Connected to the server..." << endl;
     }
-
-    string message;
-    cout << "Insert message to send to the server on IP: " << ip << endl;
-    getline(cin, message);
-    cout << "You've entered: " << message << endl;
-
-    return 0;
 }
