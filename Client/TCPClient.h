@@ -6,17 +6,19 @@
 #define CLIENT_SERVER_SOCKET_TCPCLIENT_H
 
 #include <sys/socket.h>
-
-#define IPSIZE 14
+#include <netdb.h>
 
 class TCPClient {
 public:
     TCPClient();
     int initClient();
-
+    ssize_t sendToServer(const void *msg, size_t length);
 private:
-    char ip[IPSIZE] = {'1','0','.','0','.','0','.','1'};
     int tcpSocket;
+    const char *IPAddr;
+    const char *PortNr;
+    struct addrinfo hints;
+    struct addrinfo *serverinfo;
 };
 
 

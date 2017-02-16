@@ -4,18 +4,31 @@
 
 #include "TCPClient.h"
 #include <iostream>
+#include <cstring>
 
 using namespace std;
 TCPClient::TCPClient() {
     cout << "Initializing client..." << endl << "Creating socket..." << endl;
+    IPAddr = "127.0.0.1";
+    PortNr = "12000";
+    memset(&hints, 0, sizeof(hints));
+    hints.ai_family = AF_INET;
+    hints.ai_socktype = SOCK_STREAM;
 }
 
 int TCPClient::initClient() {
+    int status = getaddrinfo(IPAddr, PortNr, &hints, &serverinfo);
+
+    if(status != 0){
+        cout << "Problems assigning the server to the ip" << endl << gai_strerror(status) << endl;
+        return status;
+    }
+
     // create a socket with standard setup of:
     // network connection,
     // continuous stream of data
     // and default protocol (0)
-    tcpSocket = socket(AF_INET, SOCK_STREAM, 0);
+    tcpSocket = socket(serverinfo->ai_family, serverinfo->ai_socktype, serverinfo->ai_protocol);
     if(tcpSocket <= 0){
         cout << "Failed creation of socket" << endl << tcpSocket << endl;
         return tcpSocket;
@@ -24,9 +37,8 @@ int TCPClient::initClient() {
     }
 
 
-    const sockaddr tcpAddress = {AF_INET, "10.0.0.1"};
 
-    int error = connect(tcpSocket, &tcpAddress, sizeof(tcpAddress));
+    int error = connect(tcpSocket, serverinfo->ai_addr, serverinfo->ai_addrlen);
     if(error == -1) {
         cout << "An error occured when connecting to the server, dropping connection.. :(" << endl
              << error << endl;
@@ -34,4 +46,8 @@ int TCPClient::initClient() {
     } else {
         cout << "Connected to the server..." << endl;
     }
+}
+
+ssize_t TCPClient::sendToServer(const void *msg, size_t length) {
+    return send(tcpSocket, msg, length, 0);
 }
