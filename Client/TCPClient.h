@@ -10,9 +10,25 @@
 
 class TCPClient {
 public:
+    /*!
+     * Setup constants
+     */
     TCPClient();
+
+    /*!
+     * Init the Client
+     * @return 0 on success otherwise standard error
+     */
     int initClient();
+
+    /*!
+     * Send a message to the server
+     * @param msg The message
+     * @param length The length of the message
+     * @return 0 on success otherwise standard error
+     */
     ssize_t sendToServer(const void *msg, size_t length);
+
 private:
     int tcpSocket;
     const char *IPAddr;
