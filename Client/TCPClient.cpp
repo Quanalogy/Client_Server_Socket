@@ -21,7 +21,7 @@ int TCPClient::initClient() {
     int status = getaddrinfo(IPAddr, PortNr, &hints, &serverinfo);
 
     if(status != 0){
-        cout << "Problems assigning the server to the ip" << endl << gai_strerror(status) << endl;
+        cout << "Problems assigning the server to the IP" << endl << gai_strerror(status) << endl;
         return status;
     }
 }
@@ -39,7 +39,7 @@ ssize_t TCPClient::sendToServer(const void *msg, size_t length) {
     // Connect to the server
     int error = connect(tcpSocket, serverinfo->ai_addr, serverinfo->ai_addrlen);
     if(error == -1) {
-        cout << "An error occured when connecting to the server, dropping connection.. :(" << endl
+        cout << "An error occurred while connecting to the server, dropping connection.. :(" << endl
              << gai_strerror(error) << endl;
         return error;
     } else {
