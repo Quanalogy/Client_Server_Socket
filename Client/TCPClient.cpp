@@ -9,8 +9,10 @@
 using namespace std;
 TCPClient::TCPClient() {
     cout << "Initializing client..." << endl << "Creating socket..." << endl;
-    IPAddr = "127.0.0.1";
-    PortNr = "12000";
+    //IPAddr = "127.0.0.1";
+    //PortNr = "12000";
+    IPAddr = "10.0.0.1";
+    PortNr = "9000";
     memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_INET;
     hints.ai_socktype = SOCK_STREAM;
