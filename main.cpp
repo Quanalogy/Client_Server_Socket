@@ -14,10 +14,10 @@ int main() {
         getline(cin, message);
         size_t length = message.length();
         cout << "You've entered: " << message << " in a size of: " << length << endl;
-        ssize_t returnlegth = client.sendToServer(&message[0], length);
-        if(returnlegth == -1){
+        ssize_t returnlength = client.sendToServer(&message[0], length);
+        if(returnlength == -1){
             cout << "Error sending message to server" << endl;
-        } else if (returnlegth != length){
+        } else if (returnlength != length){
             cout << "Not all of the message came through" << endl;
         } else {
             cout << "The total message were delivered - nice!" << endl;
