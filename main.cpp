@@ -5,8 +5,6 @@ using namespace std;
 int main() {
 
     TCPClient client;
-
-    client.initClient();
     string message;
     char recvMessage[1000] = {0};
     while(1) {

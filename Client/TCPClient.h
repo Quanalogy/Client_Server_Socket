@@ -16,14 +16,8 @@ public:
     TCPClient();
 
     /*!
-     * Init the Client
-     * @return 0 on success otherwise standard error
-     */
-    int initClient();
-
-    /*!
      * Send a message to the server
-     * @param msg The message
+     * @param msg The message: write dir for a list of files to get
      * @param length The length of the message
      * @return 0 on success otherwise standard error
      */

@@ -16,17 +16,15 @@ TCPClient::TCPClient() {
     hints.ai_socktype = SOCK_STREAM;
 }
 
-int TCPClient::initClient() {
-    // Make ip and port in readable format for the socket
+ssize_t TCPClient::sendToServer(const void *msg, size_t length) {
+
     int status = getaddrinfo(IPAddr, PortNr, &hints, &serverinfo);
 
     if(status != 0){
         cout << "Problems assigning the server to the IP" << endl << gai_strerror(status) << endl;
         return status;
     }
-}
 
-ssize_t TCPClient::sendToServer(const void *msg, size_t length) {
     // create a socket for ip and port
     tcpSocket = socket(serverinfo->ai_family, serverinfo->ai_socktype, serverinfo->ai_protocol);
     if(tcpSocket <= 0){
@@ -40,7 +38,7 @@ ssize_t TCPClient::sendToServer(const void *msg, size_t length) {
     int error = connect(tcpSocket, serverinfo->ai_addr, serverinfo->ai_addrlen);
     if(error == -1) {
         cout << "An error occurred while connecting to the server, dropping connection.. :(" << endl
-             << gai_strerror(error) << endl;
+             << strerror(errno) << endl;
         return error;
     } else {
         cout << "Connected to the server..." << endl;
@@ -59,4 +57,6 @@ ssize_t TCPClient::receiveFromServer(char *buf) {
 
     cout << "Number of bytes received: " << bytesRecv << endl
          << "Received: " << buf << endl;
+
+    return bytesRecv;
 }
