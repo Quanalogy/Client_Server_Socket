@@ -49,7 +49,14 @@ ssize_t TCPClient::sendToServer(const void *msg, size_t length) {
 }
 
 ssize_t TCPClient::receiveFromServer(char *buf) {
-    ssize_t bytesRecv = recvfrom(tcpSocket, buf, 1000, 0, serverinfo->ai_addr, &serverinfo->ai_addrlen);
+    ssize_t bytesRecv = 1;
+
+//    while(bytesRecv > 0) {
+        bytesRecv = recvfrom(tcpSocket, buf, 1000, 0,
+                             serverinfo->ai_addr, &serverinfo->ai_addrlen);
+        cout << "bytesreceived: " << bytesRecv << endl;
+//    }
+
 
     if(bytesRecv == -1) {
         cout << "Error receiving the data: " << strerror(errno) << endl;
