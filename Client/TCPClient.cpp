@@ -48,22 +48,58 @@ ssize_t TCPClient::sendToServer(const void *msg, size_t length) {
     return send(tcpSocket, msg, length, 0);
 }
 
-ssize_t TCPClient::receiveFromServer(char *buf) {
-    ssize_t bytesRecv = 1;
+ssize_t TCPClient::receiveFromServer(char ***buf) {
 
-//    while(bytesRecv > 0) {
-        bytesRecv = recvfrom(tcpSocket, buf, 1000, 0,
-                             serverinfo->ai_addr, &serverinfo->ai_addrlen);
-        cout << "bytesreceived: " << bytesRecv << endl;
-//    }
+    // Receive an size_t describing how many elements to expect.
+    char elementBuf[sizeof(size_t)];
+    size_t elements = 0;
+    ssize_t wordsToRecv = recvfrom(tcpSocket, elementBuf, sizeof(size_t), 0,
+                                   serverinfo->ai_addr, &serverinfo->ai_addrlen);
 
-
-    if(bytesRecv == -1) {
-        cout << "Error receiving the data: " << strerror(errno) << endl;
+    if(wordsToRecv == -1){
+        cout << "Error receiving number of dir elements, quitting with error: "
+             << strerror(errno) << endl;
+        return 0;
+    } else {
+        elements = (size_t) atoi(elementBuf);
+        cout << "This is the size: " << elements << endl;
     }
 
-    cout << "Number of bytes received: " << bytesRecv << endl
-         << "Received: " << buf << endl;
+    *buf = (char **) calloc(elements, (sizeof(char *)));
+
+    char *recvBuffer;
+    ssize_t bytesRecv = 1;
+
+    int index = 0;
+    while(bytesRecv != 0) {
+        size_t len = 0;
+
+        bytesRecv = recvfrom(tcpSocket, &len, sizeof(len), 0,
+                             serverinfo->ai_addr, &serverinfo->ai_addrlen);
+        if(bytesRecv == -1) {
+            cout << "Failed receiving the size of elements: " << strerror(errno) << endl;
+        }
+
+        recvBuffer = (char *) calloc(len, sizeof(char *));
+
+        bytesRecv = recvfrom(tcpSocket, &recvBuffer[0], len, 0,
+                             serverinfo->ai_addr, &serverinfo->ai_addrlen);
+        if(bytesRecv == -1) {
+            cout << "Failed receiving the elements: " << strerror(errno) << endl;
+        } else {
+            recvBuffer[bytesRecv] = '\0';
+            (*buf)[index] = strdup(recvBuffer);
+            cout << "bytesreceived: " << bytesRecv << " of: " << recvBuffer<< endl
+                    << "Copy: " << (*buf)[index] << endl;
+        }
+//        index += bytesRecv;
+        index++;
+    }
+
+    cout << "end, now total:" << endl;
+    for (int j = 0; j < elements; ++j) {
+        cout << "Received: " << (*buf)[j] << endl;
+    }
 
     return bytesRecv;
 }

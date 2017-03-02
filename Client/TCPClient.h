@@ -23,7 +23,7 @@ public:
      */
     ssize_t sendToServer(const void *msg, size_t length);
 
-    ssize_t receiveFromServer(char *buf);
+    ssize_t receiveFromServer(char ***buf);
 private:
     int tcpSocket;
     const char *IPAddr;
