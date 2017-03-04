@@ -95,11 +95,11 @@ ssize_t TCPClient::receiveFileFromServer(const char *filename) {
             } else {
                 cout << "Wrote " << filebytes << " bytes" << endl;
             }
-            fclose(file);
         }
 
         remainingData -= bytesReceived;
     }
+    fclose(file);
     cout << "File retrieved" << endl;
     return bytesReceived;
 }

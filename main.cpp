@@ -10,10 +10,10 @@ int main() {
     TCPClient client;
     string message;
     char **recvMessage;
-    char cwd[1024];
+    /*char cwd[1024];
     if(getcwd(cwd, sizeof(cwd)) != NULL){
         cout << "Saving files to folder: " << cwd << endl;
-    }
+    }*/
     cout << "Hi! Welcome to the TCPClient, from here you can get a file on the server!" << endl;
     while (1) {
         int choice;
@@ -25,6 +25,10 @@ int main() {
             cin >> choice;
         } while (choice < 1 || choice > 3);
 
+        char cwd[1024];
+        if(getcwd(cwd, sizeof(cwd)) != NULL){
+            cout << "Saving files to folder: " << cwd << endl;
+        }
 
         if (choice == 3) {
             return 0;
@@ -62,9 +66,6 @@ int main() {
             client.receiveFromServer(&recvMessage);
             cout << "================== End of transaction ==================" << endl << endl;
         }
-
     }
-
-    //return 0;
 }
 
