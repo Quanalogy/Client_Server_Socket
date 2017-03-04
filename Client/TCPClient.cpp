@@ -8,7 +8,6 @@
 
 using namespace std;
 TCPClient::TCPClient() {
-    cout << "Initializing client..." << endl << "Creating socket..." << endl;
     IPAddr = "127.0.0.1";
     PortNr = "12000";
     memset(&hints, 0, sizeof(hints));
@@ -30,8 +29,6 @@ ssize_t TCPClient::sendToServer(const void *msg, size_t length) {
     if(tcpSocket <= 0){
         cout << "Failed creation of socket" << endl << tcpSocket << endl;
         return tcpSocket;
-    } else {
-        cout << "Successfully created the socket..." << endl;
     }
 
     // Connect to the server
@@ -40,8 +37,6 @@ ssize_t TCPClient::sendToServer(const void *msg, size_t length) {
         cout << "An error occurred while connecting to the server, dropping connection.. :(" << endl
              << strerror(errno) << endl;
         return error;
-    } else {
-        cout << "Connected to the server..." << endl;
     }
 
     // Send the message
@@ -107,6 +102,7 @@ ssize_t TCPClient::receiveFileFromServer(const char *filename) {
 
         remainingData -= bytesReceived;
     }
+    cout << "File retrieved" << endl;
     return bytesReceived;
 }
 
