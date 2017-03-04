@@ -63,8 +63,6 @@ ssize_t TCPClient::receiveFileFromServer(const char *filename) {
         return -1;
     }
 
-    cout << "Filesize is: " << remainingData << endl;
-
     FILE *file = fopen(filename, "wb");
 
     if(file == NULL) {

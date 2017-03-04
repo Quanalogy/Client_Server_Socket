@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cstring>
-#include <zconf.h>
+#include <unistd.h>
 #include "Client/TCPClient.h"
 
 using namespace std;
@@ -54,9 +54,13 @@ int main() {
             cout << "Getting file and saving it in path: " << cwd << endl;
 
             client.receiveFileFromServer(cwd);
+
+            cout << "================== End of transaction ==================" << endl << endl;
+
         } else {
             client.sendToServer("dir", 3);
             client.receiveFromServer(&recvMessage);
+            cout << "================== End of transaction ==================" << endl << endl;
         }
 
     }
