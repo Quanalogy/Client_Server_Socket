@@ -1,4 +1,8 @@
 #include <iostream>
+#include <unistd.h>
+#include <stdio.h>
+#include <errno.h>
+#include <cstring>
 #include "Client/TCPClient.h"
 
 using namespace std;
@@ -7,6 +11,14 @@ int main() {
     TCPClient client;
     string message;
     char **recvMessage;
+    char cwd[1024];
+
+    if(getcwd(cwd, sizeof(cwd)) != NULL){
+        strcat(cwd, "/.newfile");
+        cout << "Current working directory is: " << cwd << endl;
+    }
+
+
     while(1) {
         cout << "Insert message to send to the server" << endl;
         getline(cin, message);
@@ -20,7 +32,8 @@ int main() {
         } else {
             cout << "The total message were delivered - nice!" << endl;
         }
-        client.receiveFileFromServer("/home/munk/CLionProjects/Client_Server_Socket/.testfile");
+
+        client.receiveFileFromServer(cwd);
     }
 
     //return 0;
