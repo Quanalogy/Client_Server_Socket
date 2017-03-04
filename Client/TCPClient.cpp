@@ -48,6 +48,63 @@ ssize_t TCPClient::sendToServer(const void *msg, size_t length) {
     return send(tcpSocket, msg, length, 0);
 }
 
+
+ssize_t TCPClient::receiveFileFromServer(const char *filename) {
+
+    size_t bufSize = 256;
+    char filesizeBuf[bufSize];
+    // Get size of file to receive
+    ssize_t bytesReceived = recvfrom(tcpSocket, filesizeBuf, bufSize, 0,
+                                        serverinfo->ai_addr, &serverinfo->ai_addrlen);
+
+    if(bytesReceived == -1) {
+        cout << "Error receiving filesize, with error: " << strerror(errno) << endl;
+        return bytesReceived;
+    }
+    ssize_t remainingData = atoi(filesizeBuf);
+
+    cout << "Filesize is: " << remainingData << endl;
+
+    FILE *file = fopen(filename, "wb");
+
+    if(file == NULL) {
+        cout << "Failed to give write permissions for new received file!! Error: " << strerror(errno) << endl;
+        return -1;
+    } else {
+        cout << "Successfully opened file" << endl;
+    }
+
+    bufSize = 1000;
+
+    char fileBuffer[bufSize];
+
+    while(remainingData > 0) {
+        if(remainingData < 1000) {
+            bufSize = (size_t) remainingData;
+        }
+
+
+        bytesReceived = recvfrom(tcpSocket, fileBuffer, bufSize, 0,
+                                    serverinfo->ai_addr, &serverinfo->ai_addrlen);
+
+        if(bytesReceived == -1) {
+            cout << "Error receiving the file, with error: " << strerror(errno) << endl;
+        } else {
+            cout << "Got " << bytesReceived << " bytes" << endl;
+            size_t filebytes = fwrite(fileBuffer, sizeof(char), bufSize, file);
+            if(filebytes == -1){
+                cout << "Error Writing to the file" << endl;
+            } else {
+                cout << "Wrote " << filebytes << " bytes" << endl;
+            }
+            fclose(file);
+        }
+
+        remainingData -= bytesReceived;
+    }
+
+}
+
 ssize_t TCPClient::receiveFromServer(char ***buf) {
 
     // Receive an size_t describing how many elements to expect.

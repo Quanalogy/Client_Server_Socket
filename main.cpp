@@ -20,8 +20,7 @@ int main() {
         } else {
             cout << "The total message were delivered - nice!" << endl;
         }
-        cout << "size from server: " << client.receiveFromServer(&recvMessage) << endl;
-
+        client.receiveFileFromServer("/home/munk/CLionProjects/Client_Server_Socket/.testfile");
     }
 
     //return 0;
