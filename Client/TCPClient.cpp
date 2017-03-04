@@ -63,6 +63,11 @@ ssize_t TCPClient::receiveFileFromServer(const char *filename) {
     }
     ssize_t remainingData = atoi(filesizeBuf);
 
+    if(remainingData == 404){
+        cout << "File not found, please send a location which corresponds to an existing file" << endl;
+        return -1;
+    }
+
     cout << "Filesize is: " << remainingData << endl;
 
     FILE *file = fopen(filename, "wb");
@@ -102,7 +107,7 @@ ssize_t TCPClient::receiveFileFromServer(const char *filename) {
 
         remainingData -= bytesReceived;
     }
-
+    return bytesReceived;
 }
 
 ssize_t TCPClient::receiveFromServer(char ***buf) {
