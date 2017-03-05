@@ -56,10 +56,13 @@ ssize_t TCPClient::receiveFileFromServer(const char *filename) {
         cout << "Error receiving filesize, with error: " << strerror(errno) << endl;
         return bytesReceived;
     }
-    ssize_t remainingData = atoi(filesizeBuf);
 
-    if(remainingData == 404){
+    ssize_t remainingData = atoi(filesizeBuf);
+    if(remainingData == 404){           // File not found
         cout << "File not found, please send a location which corresponds to an existing file" << endl;
+        return -1;
+    } else if (remainingData == 400) {  // Bad request - directory
+        cout << "You have requested a directory, this is not allowed, returning!" << endl;
         return -1;
     }
 
@@ -154,7 +157,7 @@ ssize_t TCPClient::receiveFromServer(char ***buf) {
 
     cout << "end, now total:" << endl;
     for (int j = 0; j < elements; ++j) {
-        cout << "Received: " << (*buf)[j] << endl;
+        cout << (*buf)[j] << endl;
     }
 
     return bytesRecv;

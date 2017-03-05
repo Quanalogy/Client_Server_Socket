@@ -55,16 +55,19 @@ int main() {
             strcat(cwd, "/");
             strcat(cwd, filename.c_str());
 
-            cout << "Getting file and saving it in path: " << cwd << endl;
+            cout << "Getting file and saving it in path: " << cwd << endl << endl;
+
+            cout << "================== Start of transaction ==================" << endl << endl;
 
             client.receiveFileFromServer(cwd);
 
-            cout << "================== End of transaction ==================" << endl << endl;
+            cout << endl << "================== End of transaction ==================" << endl << endl;
 
         } else {
+            cout << "================== Start of transaction ==================" << endl << endl;
             client.sendToServer("dir", 3);
             client.receiveFromServer(&recvMessage);
-            cout << "================== End of transaction ==================" << endl << endl;
+            cout << endl << "================== End of transaction ==================" << endl << endl;
         }
     }
 }
