@@ -9,6 +9,7 @@
 using namespace std;
 TCPClient::TCPClient() {
     IPAddr = "127.0.0.1";
+//    IPAddr = "172.20.10.9";;
     PortNr = "12000";
     memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_INET;
@@ -161,4 +162,24 @@ ssize_t TCPClient::receiveFromServer(char ***buf) {
     }
 
     return bytesRecv;
+}
+
+void TCPClient::getIP(char **ip) {
+    *ip = (char *) malloc(strlen(IPAddr)*sizeof(char));
+    snprintf(*ip, strlen(IPAddr)+1, "%s", IPAddr);
+}
+
+void TCPClient::getPort(char **port) {
+    *port = (char *) malloc(strlen(PortNr)* sizeof(char));
+    snprintf(*port, strlen(PortNr)+1, "%s", PortNr);
+}
+
+void TCPClient::setIp(char *ip) {
+    IPAddr = ip;
+    cout << "Ip set to: " << IPAddr << endl;
+}
+
+void TCPClient::setPort(char *port) {
+    PortNr = port;
+    cout << "Port set to: " << PortNr << endl;
 }

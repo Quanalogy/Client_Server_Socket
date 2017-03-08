@@ -25,10 +25,14 @@ public:
 
     ssize_t receiveFromServer(char ***buf);
     ssize_t receiveFileFromServer(const char *filename);
+    void getIP(char **ip);
+    void getPort(char **port);
+    void setIp(char *ip);
+    void setPort(char *port);
 private:
     int tcpSocket;
-    const char *IPAddr;
-    const char *PortNr;
+    char *IPAddr;
+    char *PortNr;
     struct addrinfo hints;
     struct addrinfo *serverinfo;
 };

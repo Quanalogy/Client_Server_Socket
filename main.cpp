@@ -5,15 +5,30 @@
 
 using namespace std;
 
-int main() {
+int main(int argc, char *argv[]) {
 
     TCPClient client;
+
+    char *clientIP = NULL;
+    char *clientPort;
+    client.getIP(&clientIP);
+    client.getPort(&clientPort);
+
+    if(argc == 3) { // The command to run this program + ip + portnr
+
+        cout << "Setting new IP of: " << argv[1]
+             << " and port of: " << argv[2] << " - for the server"
+             << endl << "Hint, run the program without arguments to start the server with default parameters: "
+             << endl << "IP: " << clientIP  << endl << "Port: " << clientPort  << endl ;
+        client.setIp(argv[1]);
+        client.setPort(argv[2]);
+    } else {
+        cout << "Using default configuration of" << endl << "IP: " << clientIP << " and Port: " << clientPort << endl;
+    }
+
     string message;
     char **recvMessage;
-    /*char cwd[1024];
-    if(getcwd(cwd, sizeof(cwd)) != NULL){
-        cout << "Saving files to folder: " << cwd << endl;
-    }*/
+
     cout << "Hi! Welcome to the TCPClient, from here you can get a file on the server!" << endl;
     while (1) {
         int choice;
