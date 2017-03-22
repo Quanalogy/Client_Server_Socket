@@ -31,8 +31,8 @@ public:
     void setPort(char *port);
 private:
     int tcpSocket;
-    char *IPAddr;
-    char *PortNr;
+    char const *IPAddr;
+    char const *PortNr;
     struct addrinfo hints;
     struct addrinfo *serverinfo;
 };

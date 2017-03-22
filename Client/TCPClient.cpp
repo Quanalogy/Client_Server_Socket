@@ -17,7 +17,6 @@ TCPClient::TCPClient() {
 }
 
 ssize_t TCPClient::sendToServer(const void *msg, size_t length) {
-
     int status = getaddrinfo(IPAddr, PortNr, &hints, &serverinfo);
 
     if(status != 0){
@@ -42,6 +41,7 @@ ssize_t TCPClient::sendToServer(const void *msg, size_t length) {
 
     // Send the message
     return send(tcpSocket, msg, length, 0);
+
 }
 
 
@@ -58,7 +58,9 @@ ssize_t TCPClient::receiveFileFromServer(const char *filename) {
         return bytesReceived;
     }
 
-    ssize_t remainingData = atoi(filesizeBuf);
+    ssize_t remainingData = atol(filesizeBuf);
+
+    cout << "Filesize is: " << filesizeBuf << " and atoi: " << remainingData << endl;
     if(remainingData == 404){           // File not found
         cout << "File not found, please send a location which corresponds to an existing file" << endl;
         return -1;
@@ -67,7 +69,7 @@ ssize_t TCPClient::receiveFileFromServer(const char *filename) {
         return -1;
     }
 
-    FILE *file = fopen(filename, "wb");
+    FILE *file = fopen64(filename, "wb");
 
     if(file == NULL) {
         cout << "Failed to give write permissions for new received file!! Error: " << strerror(errno) << endl;
@@ -92,19 +94,19 @@ ssize_t TCPClient::receiveFileFromServer(const char *filename) {
         if(bytesReceived == -1) {
             cout << "Error receiving the file, with error: " << strerror(errno) << endl;
         } else {
-            cout << "Got " << bytesReceived << " bytes" << endl;
-            size_t filebytes = fwrite(fileBuffer, sizeof(char), bufSize, file);
+//            cout << "Got " << bytesReceived << " bytes" << endl;
+            size_t filebytes = fwrite(fileBuffer, sizeof(char), bytesReceived, file);
             if(filebytes == -1){
                 cout << "Error Writing to the file" << endl;
             } else {
-                cout << "Wrote " << filebytes << " bytes" << endl;
+//                cout << "Wrote " << filebytes << " bytes" << endl;
             }
         }
 
         remainingData -= bytesReceived;
     }
     fclose(file);
-    cout << "File retrieved" << endl;
+    cout << "File retrieved, with " << remainingData << " remaining bytes" << endl;
     return bytesReceived;
 }
 
@@ -149,8 +151,8 @@ ssize_t TCPClient::receiveFromServer(char ***buf) {
         } else {
             recvBuffer[bytesRecv] = '\0';
             (*buf)[index] = strdup(recvBuffer);
-            cout << "bytesreceived: " << bytesRecv << " of: " << recvBuffer<< endl
-                    << "Copy: " << (*buf)[index] << endl;
+//            cout << "bytesreceived: " << bytesRecv << " of: " << recvBuffer<< endl
+//                    << "Copy: " << (*buf)[index] << endl;
         }
 //        index += bytesRecv;
         index++;
