@@ -10,7 +10,7 @@ using namespace std;
 TCPClient::TCPClient() {
     IPAddr = "127.0.0.1";
 //    IPAddr = "172.20.10.9";;
-    PortNr = "12000";
+    PortNr = "9000";
     memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_INET;
     hints.ai_socktype = SOCK_STREAM;
